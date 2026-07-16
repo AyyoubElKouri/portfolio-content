@@ -105,25 +105,25 @@ const merged = {
   date: existingFM.date || new Date().toISOString().split("T")[0],
   tags: existingFM.tags || aiFM.tags || [],
   readTime: existingFM.readTime || aiFM.readTime || "5 min",
-  slug: SLUG,
+  slug: existingFM.slug || aiFM.slug || SLUG,
 };
 
 // update "updated" field on every run
 merged.updated = new Date().toISOString().split("T")[0];
 
 // ---------- write file ----------
-function toYAML(val) {
+function yamlStr(val) {
   if (Array.isArray(val)) return `[${val.map((s) => `"${s}"`).join(", ")}]`;
-  if (typeof val === "string" && val.includes(":")) return `"${val}"`;
-  return val;
+  if (typeof val === "string") return `"${val.replace(/"/g, '\\"')}"`;
+  return String(val ?? "");
 }
 
 const frontmatter = `---
-title: ${merged.title}
-description: ${merged.description}
+title: ${yamlStr(merged.title)}
+description: ${yamlStr(merged.description)}
 date: ${merged.date}
 updated: ${merged.updated}
-tags: ${toYAML(merged.tags)}
+tags: ${yamlStr(merged.tags)}
 readTime: ${merged.readTime}
 slug: ${merged.slug}
 ---`;
