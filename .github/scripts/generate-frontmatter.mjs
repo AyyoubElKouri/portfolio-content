@@ -105,7 +105,7 @@ const merged = {
   date: existingFM.date || new Date().toISOString().split("T")[0],
   tags: existingFM.tags || aiFM.tags || [],
   readTime: existingFM.readTime || aiFM.readTime || "5 min",
-  slug: existingFM.slug || aiFM.slug || SLUG,
+  slug: SLUG,
 };
 
 // update "updated" field on every run
