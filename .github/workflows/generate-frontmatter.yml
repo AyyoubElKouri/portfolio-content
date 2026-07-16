@@ -1,24 +1,23 @@
 name: Generate frontmatter
-
 on:
   push:
     paths:
       - "content/**/*.md"
     branches:
       - main
-
+permissions:
+  contents: write
+  models: read
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Get changed markdown files
         id: changed
         uses: tj-actions/changed-files@v45
         with:
           files: "content/**/*.md"
-
       - name: Generate frontmatter for each changed file
         if: steps.changed.outputs.any_changed == 'true'
         run: |
@@ -28,7 +27,6 @@ jobs:
           done
         env:
           GH_TOKEN: ${{ github.token }}
-
       - name: Commit enriched files
         run: |
           git config --local user.email "action@github.com"
