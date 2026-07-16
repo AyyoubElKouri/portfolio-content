@@ -1,0 +1,38 @@
+name: Generate frontmatter
+
+on:
+  push:
+    paths:
+      - "content/**/*.md"
+    branches:
+      - main
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get changed markdown files
+        id: changed
+        uses: tj-actions/changed-files@v45
+        with:
+          files: "content/**/*.md"
+
+      - name: Generate frontmatter for each changed file
+        if: steps.changed.outputs.any_changed == 'true'
+        run: |
+          for file in ${{ steps.changed.outputs.all_changed_files }}; do
+            echo "=== Processing $file ==="
+            node .github/scripts/generate-frontmatter.mjs "$file"
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Commit enriched files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Frontmatter Action"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: generate frontmatter"
+          git push
