@@ -1,6 +1,11 @@
 ---
 title: "Comprendre l'injection de dependances dans NestJS"
 description: "Guide pratique des patterns d'injection de dependances dans NestJS : injection par constructeur, fournisseurs personnalises et strategies de test."
+date: 2026-07-16
+updated: 2026-07-16
+tags: ["Backend", "NestJS", "Testing", "JavaScript"]
+readTime: 8 min
+slug: comprendre-linjection-de-dependances-dans-nestjs
 ---
 L'injection de dependances (DI) est un pattern de conception dans lequel une classe reçoit ses dependances d'une source externe plutot que de les creer elle-meme. NestJS integre la DI dans son coeur, ce qui en fait l'un des frameworks les plus agreables pour construire des applications serveur testables et maintenables.
 

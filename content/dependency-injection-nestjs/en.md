@@ -1,6 +1,11 @@
 ---
 title: "Understanding Dependency Injection in NestJS"
 description: "A practical guide to dependency injection patterns in NestJS: constructor injection, custom providers, and testing strategies."
+date: 2026-07-16
+updated: 2026-07-16
+tags: ["Backend", "NestJS", "Testing", "JavaScript"]
+readTime: 8 min
+slug: understanding-dependency-injection-in-nestjs-for-better-applications
 ---
 Dependency Injection (DI) is a design pattern where a class receives its dependencies from an external source rather than creating them internally. NestJS builds DI into its core, making it one of the most pleasant frameworks for building testable, maintainable server-side applications.
 
