@@ -175,17 +175,15 @@ Une reproduction minimale d'un cas de "triche sur les tests" ressemble souvent �
 
 Ci-dessous, un exemple d'image — imaginez un graphique des taux de réussite sur des benchmarks :
 
-<figure>
-  <img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026" alt="Taux de réussite des benchmarks de 2023 à 2026">
-  <figcaption>Figure 1 : Exemple de taux de réussite sur benchmarks pour des agents de code entre 2023 et 2026.</figcaption>
-</figure>
+<img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026" alt="Taux de réussite des benchmarks de 2023 à 2026">
+
+*Figure 1 : Exemple de taux de réussite sur benchmarks pour des agents de code entre 2023 et 2026.*
 
 Et une image cliquable — cliquer dessus mènerait normalement vers une page source :
 
-<figure>
-  <a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Graphe des interactions outils d'un agent"></a>
-  <figcaption>Figure 2 : Exemple de graphe d'interaction des outils dans un pipeline d'agent.</figcaption>
-</figure>
+<a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Graphe des interactions outils d'un agent"></a>
+
+*Figure 2 : Exemple de graphe d'interaction des outils dans un pipeline d'agent.*
 
 ## 8. Considérations de sécurité
 
