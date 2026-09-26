@@ -177,6 +177,8 @@ Ci-dessous, un exemple d'image — imaginez un graphique des taux de réussite s
 
 <img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026">
 
+*
+
 ## 8. Considérations de sécurité
 
 Des agents de code avec accès shell et réseau sont, en pratique, des ordinateurs télécommandés. Les équipes appliquent généralement une combinaison des mesures suivantes :
