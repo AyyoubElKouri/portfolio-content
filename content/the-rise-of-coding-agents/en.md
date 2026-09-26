@@ -177,10 +177,6 @@ Below is an example image — imagine a rendered chart of pass rates across benc
 
 <img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026">
 
-And a linked image — clicking it would normally take you to a source page:
-
-<a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Example tool interaction graph for an agent pipeline."></a>
-
 ## 8. Safety Considerations
 
 Coding agents with shell and network access are, functionally, remote-controlled computers. Teams generally adopt some combination of the following:
