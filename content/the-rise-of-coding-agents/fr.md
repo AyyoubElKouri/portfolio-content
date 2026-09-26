@@ -179,9 +179,7 @@ Ci-dessous, un exemple d'image — imaginez un graphique des taux de réussite s
 
 Et une image cliquable — cliquer dessus mènerait normalement vers une page source :
 
-<a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Graphe des interactions outils d'un agent"></a>
-
-*Figure 2 : Exemple de graphe d'interaction des outils dans un pipeline d'agent.*
+<a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Exemple de graphe d'interaction des outils dans un pipeline d'agent."></a>
 
 ## 8. Considérations de sécurité
 

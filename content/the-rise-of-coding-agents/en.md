@@ -179,9 +179,7 @@ Below is an example image — imagine a rendered chart of pass rates across benc
 
 And a linked image — clicking it would normally take you to a source page:
 
-<a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Agent tool interaction graph"></a>
-
-*Figure 2: Example tool interaction graph for an agent pipeline.*
+<a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Example tool interaction graph for an agent pipeline."></a>
 
 ## 8. Safety Considerations
 
