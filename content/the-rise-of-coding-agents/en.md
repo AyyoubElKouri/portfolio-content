@@ -175,17 +175,11 @@ Evaluating agents is harder than evaluating single model outputs because success
 
 Below is an example image — imagine a rendered chart of pass rates across benchmark tasks:
 
-<figure>
-  <img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026" alt="Benchmark pass rates from 2023 to 2026">
-  <figcaption>Figure 1: Example benchmark pass rates for coding agents from 2023 to 2026.</figcaption>
-</figure>
+![Figure 1: Benchmark pass rates from 2023 to 2026](https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026)
 
 And a linked image — clicking it would normally take you to a source page:
 
-<figure>
-  <a href="https://www.anthropic.com/engineering"><img src="https://placehold.co/300x200?text=Agent+Tool+Graph" alt="Agent tool interaction graph"></a>
-  <figcaption>Figure 2: Example tool interaction graph for an agent pipeline.</figcaption>
-</figure>
+[![Figure 2: Agent tool interaction graph](https://placehold.co/300x200?text=Agent+Tool+Graph)](https://www.anthropic.com/engineering)
 
 ## 8. Safety Considerations
 
