@@ -175,9 +175,7 @@ Evaluating agents is harder than evaluating single model outputs because success
 
 Below is an example image — imagine a rendered chart of pass rates across benchmark tasks:
 
-<img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026" alt="Benchmark pass rates from 2023 to 2026">
-
-*Figure 1: Example benchmark pass rates for coding agents from 2023 to 2026.*
+<img src="https://placehold.co/900x450?text=Benchmark+Pass+Rates+2023-2026">
 
 And a linked image — clicking it would normally take you to a source page:
 
