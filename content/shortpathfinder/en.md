@@ -4,7 +4,7 @@ description: "Interactive pathfinding visualizer on a 2D grid with a React front
 date: 2026-09-28
 updated: 2026-09-28
 tags: ["React", "TypeScript", "C++", "WebAssembly"]
-readTime: 5 min
+readTime: 8 min
 slug: shortpathfinder
 ---
 
@@ -89,5 +89,42 @@ Heuristics apply only to AStar, IDAStar, Jump Point Search, and Orthogonal JPS:
 | Chebyshev | Eight directional with diagonal cost 1 | Weak here because diagonals cost sqrt2 |
 
 Config: allowDiagonal switches 4 and 8 neighborhoods, except Orthogonal JPS which stays 4 directional. dontCrossCorners blocks diagonal moves through walls, but the current Dijkstra and AStar code paths do not check it. The bidirectional flag is stored but has no effect yet.
+
+## System Architecture
+
+## Frontend Implementation
+
+The grid renders as CSS grid with 25px cells and a default size of 30 rows by 50 columns. The first click places the start node, the second places the end node, and further dragging paints or clears walls. Colors distinguish each state: green start, red end, gray walls, blue visited, yellow path.
+
+State lives in Zustand stores. The grid store holds cells, dimensions, drag state, and undo history. Two independent algorithm stores hold the configuration and last result of each grid. The mode store switches between single and double views, and the router renders the matching page.
+
+Interaction favors the keyboard. Single keys open selectors, generate mazes, reset the grid, or start a run, while Ctrl+Z and Ctrl+Y undo and redo. History stores cell deltas rather than full snapshots, so undo stays cheap on large grids. Maze generation uses recursive backtracking, preserves start and end positions, guarantees reachability, and opens extra loops for alternate routes.
+
+A run follows one path through the useRun hook. It scans cells for start and goal indices, flattens walls to a Uint8Array where 1 means wall, maps TypeScript enums to the numeric values the engine expects, and calls findPath. It then animates visited cells followed by the final path in batches of five every 50ms with a 200ms pause between phases, skipping start and end cells. Sound pitch rises with progress and a chord marks success. Cost and visited count land in the stats card and the console.
+
+## WebAssembly Integration
+
+The C++ core compiles with Emscripten through embind bindings. The Makefile offers debug, optimized release, and native test targets, and a copy script moves the built JavaScript glue and binary into public/wasm for the frontend.
+
+Loading happens once. A loader injects the glue script, initializes the module, validates the expected exports, and caches the promise so every later run reuses the same instance. A hook exposes a ready flag and a findPath function to React components.
+
+Each call crosses the boundary twice. JavaScript sends the flat grid, dimensions, start and goal indices, algorithm and heuristic values, and three flags. The binding layer converts the typed array to a C++ vector, the engine builds a graph and runs the selected algorithm, and the result returns five fields: path, visited order, cost, success flag, and microsecond timing. The hook normalizes these into plain arrays. The split stays strict: JavaScript never searches and C++ never touches the DOM.
+
+## Challenges and Lessons Learned
+
+Asynchronous initialization caused the first failures. The module loads after first render, so every run path checks readiness and reports errors instead of assuming availability.
+
+Animation performance required batching. Updating state per node re-rendered the grid hundreds of times per second and dropped frames. Fixed batches of five kept motion smooth without hiding search behavior.
+
+Reviewing the engine against the article exposed two honest gaps. The Dijkstra and AStar paths ignore the dontCrossCorners flag while the other algorithms enforce it, so identical settings can produce different corner behavior per algorithm. The bidirectional flag is stored and passed through but no algorithm reads it yet. Both are documented in the fundamentals section rather than hidden.
+
+Enum coupling between layers proved fragile. TypeScript must map algorithms and heuristics to numbers in the exact order of the C++ enum header, so the mapping carries a comment pointing at that file. Any new algorithm requires edits on both sides.
+
+## Conclusion and Future Work
+
+ShortPathFinder visualizes eight pathfinding algorithms on an interactive 2D grid, with single run and side by side comparison modes, maze generation, and animated playback. A React frontend handles interaction while a C++ engine compiled to WebAssembly handles search.
+
+Live demo: https://ayyoubelkouri.github.io/ShortPathFinder/
+Code: https://github.com/AyyoubElKouri/ShortPathFinder
 
 
