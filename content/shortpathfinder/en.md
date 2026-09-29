@@ -1,10 +1,10 @@
 ---
 title: "ShortPathFinder: Visualizing Pathfinding with React, C++, and WebAssembly"
 description: "Interactive pathfinding visualizer on a 2D grid with a React frontend and a C++ WebAssembly search engine."
-date: 2026-09-28
-updated: 2026-09-28
+date: 2026-09-29
+updated: 2026-09-29
 tags: ["React", "TypeScript", "C++", "WebAssembly"]
-readTime: 8 min
+readTime: 10 min
 slug: shortpathfinder
 ---
 
@@ -92,6 +92,37 @@ Config: allowDiagonal switches 4 and 8 neighborhoods, except Orthogonal JPS whic
 
 ## System Architecture
 
+Three layers with strict boundaries. The frontend owns interaction and animation. The bridge owns run orchestration and data conversion. The engine owns graph search. Arrows show build time and run time relations.
+
+```mermaid
+flowchart LR
+    U([User]) -->|Starts run| A[Frontend Application]
+    A -->|Run request| B[Search Bridge]
+    B -->|findPath| E[Pathfinding Engine]
+    E -->|Result| B
+    P[Build Pipeline] -->|Builds UI| A
+    P -->|Compiles engine| E
+```
+
+One run flows through all layers in order.
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant App as Frontend Application
+    participant Bridge as Search Bridge
+    participant Engine as Pathfinding Engine
+    User->>App: Starts run
+    App->>Bridge: Run request
+    Bridge->>Engine: findPath
+    activate Engine
+    Engine->>Engine: Runs algorithm
+    Engine-->>Bridge: Path and stats
+    deactivate Engine
+    Bridge-->>App: Result
+    App-->>User: Animation
+```
+
 ## Frontend Implementation
 
 The grid renders as CSS grid with 25px cells and a default size of 30 rows by 50 columns. The first click places the start node, the second places the end node, and further dragging paints or clears walls. Colors distinguish each state: green start, red end, gray walls, blue visited, yellow path.
@@ -102,6 +133,54 @@ Interaction favors the keyboard. Single keys open selectors, generate mazes, res
 
 A run follows one path through the useRun hook. It scans cells for start and goal indices, flattens walls to a Uint8Array where 1 means wall, maps TypeScript enums to the numeric values the engine expects, and calls findPath. It then animates visited cells followed by the final path in batches of five every 50ms with a 200ms pause between phases, skipping start and end cells. Sound pitch rises with progress and a chord marks success. Cost and visited count land in the stats card and the console.
 
+## Pathfinding Engine in C++
+
+The engine exposes one static entry point. It takes a flat integer grid, dimensions, start and goal indices, an algorithm type, a heuristic type, and three flags, then returns path, visited order, cost, success flag, and timing. Internally it builds nodes, wraps them in a grid graph stored in a contiguous vector, creates the heuristic only for informed algorithms, selects the algorithm through a factory, and runs it against the graph interface.
+
+```mermaid
+classDiagram
+    class PathfindingEngine {
+        +findPath() Result
+    }
+    class GridGraph {
+        +getNeighbors()
+        +getNodePosition()
+    }
+    class IGraph {
+        <<interface>>
+    }
+    class AlgorithmFactory {
+        +createAlgorithm()
+    }
+    class HeuristicFactory {
+        +createHeuristic()
+    }
+    class IAlgorithm {
+        <<interface>>
+    }
+    class IHeuristic {
+        <<interface>>
+    }
+    class Algorithms {
+        Dijkstra, AStar, IDAStar
+        BFS, DFS, JPS, OrthogonalJPS, Trace
+    }
+    class Heuristics {
+        Manhattan, Euclidean
+        Octile, Chebyshev
+    }
+    PathfindingEngine --> GridGraph
+    PathfindingEngine --> AlgorithmFactory
+    PathfindingEngine --> HeuristicFactory
+    GridGraph ..|> IGraph
+    AlgorithmFactory --> IAlgorithm
+    HeuristicFactory --> IHeuristic
+    Algorithms ..|> IAlgorithm
+    Heuristics ..|> IHeuristic
+```
+
+New algorithms plug in by implementing the algorithm interface and registering in the factory. New heuristics follow the same pattern. The graph interface keeps both independent of grid details, which is why the same engine compiles for native tests and for WebAssembly without changes.
+
 ## WebAssembly Integration
 
 The C++ core compiles with Emscripten through embind bindings. The Makefile offers debug, optimized release, and native test targets, and a copy script moves the built JavaScript glue and binary into public/wasm for the frontend.
@@ -109,6 +188,18 @@ The C++ core compiles with Emscripten through embind bindings. The Makefile offe
 Loading happens once. A loader injects the glue script, initializes the module, validates the expected exports, and caches the promise so every later run reuses the same instance. A hook exposes a ready flag and a findPath function to React components.
 
 Each call crosses the boundary twice. JavaScript sends the flat grid, dimensions, start and goal indices, algorithm and heuristic values, and three flags. The binding layer converts the typed array to a C++ vector, the engine builds a graph and runs the selected algorithm, and the result returns five fields: path, visited order, cost, success flag, and microsecond timing. The hook normalizes these into plain arrays. The split stays strict: JavaScript never searches and C++ never touches the DOM.
+
+## Evaluation and Comparison
+
+Double grid mode makes comparison fair: both configurations run on the same layout at the same time. Each side reports three metrics that answer different questions.
+
+| Metric | Question it answers |
+|---|---|
+| Path cost | How short is the selected route |
+| Visited count | How much of the grid the search explored |
+| Execution time | How fast the engine computed the result |
+
+Figure 2 shows a typical comparison with visited regions in blue and final paths in yellow on both grids. The stats card stores cost and visited count per run, and the console logs success, cost, time, visited length, and path length for every execution. Repeating runs on generated mazes shows the expected pattern: informed searches explore less than uninformed ones on open layouts, while dense mazes narrow the gap.
 
 ## Challenges and Lessons Learned
 
