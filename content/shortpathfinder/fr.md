@@ -214,7 +214,7 @@ Le couplage des enums entre couches s'est révélé fragile. TypeScript doit con
 
 ShortPathFinder visualise huit algorithmes de pathfinding sur une grille 2D interactive, avec modes d'exécution simple et de comparaison côte à côte, génération de labyrinthes et lecture animée. Un frontend React gère l'interaction tandis qu'un moteur C++ compilé en WebAssembly gère la recherche.
 
-Démo en ligne : https://ayyoubelkouri.github.io/ShortPathFinder/
+Démo en ligne : https://sp-finder.vercel.app/
 Code : https://github.com/AyyoubElKouri/ShortPathFinder
 
 Prochaines étapes prévues : implémenter la recherche bidirectionnelle derrière le drapeau existant, ajouter une vue de benchmarks avec graphiques de temps par algorithme, prendre en charge plus de styles de labyrinthes, et améliorer la disposition sur petits écrans.

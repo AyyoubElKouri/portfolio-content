@@ -215,7 +215,7 @@ Enum coupling between layers proved fragile. TypeScript must map algorithms and 
 
 ShortPathFinder visualizes eight pathfinding algorithms on an interactive 2D grid, with single run and side by side comparison modes, maze generation, and animated playback. A React frontend handles interaction while a C++ engine compiled to WebAssembly handles search.
 
-Live demo: https://ayyoubelkouri.github.io/ShortPathFinder/
+Live demo: https://sp-finder.vercel.app/
 Code: https://github.com/AyyoubElKouri/ShortPathFinder
 
 
